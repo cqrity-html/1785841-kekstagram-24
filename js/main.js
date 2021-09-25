@@ -1,10 +1,11 @@
 // Функция для получения рандомного целого числа.
 // Источник: MDN (https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random).
 
+const message = 'Упс! Неверный диапазон.';
+
 function getRandomIntInclusive(min, max) {
   if (max <= min) {
-    console.log('Упс! Неверный диапазон.');
-    return;
+    return message;
   }
 
   min = Math.ceil(min);
@@ -18,6 +19,7 @@ getRandomIntInclusive(0, 10);
 
 const commentList = document.querySelector('.social__comments');
 const commentfield = document.querySelector('.social__footer-text');
+const errorMessage = 'Ой! Ваш комментарий слишком длинный. Попробуйте выразиться чуть лаконичнее.';
 
 function checkCommentLength(comment, maxLength) {
   if (comment.length <= maxLength) {
@@ -27,7 +29,7 @@ function checkCommentLength(comment, maxLength) {
     commentList.append(newComment);
   }
 
-  console.log('Ой! Ваш комментарий слишком длинный. Попробуйте выразиться чуть лаконичнее.');
+  return errorMessage;
 }
 
 checkCommentLength(commentfield.value, 140);
