@@ -25,6 +25,10 @@ function getLikes() {
   return getRandomIntInclusive(15, 200);
 }
 
+function getCommentsCount() {
+  return getRandomIntInclusive(1, 10);
+}
+
 function chooseAvatar() {
   return `img/avatar-${getRandomIntInclusive(1, 6)}.svg`;
 }
@@ -58,7 +62,7 @@ const NAMES = [
   'Снежана',
 ];
 
-const COMMENTS_COUNT = 10;
+const COMMENTS_COUNT = getCommentsCount();
 const PHOTO_DESCRIPTION_COUNT = 25;
 
 function createComment() {
@@ -83,3 +87,6 @@ function createPhotoDescription() {
 }
 
 createPhotoDescription();
+
+export {createPhotoDescription};
+export {COMMENTS_COUNT};
