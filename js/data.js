@@ -66,27 +66,26 @@ const COMMENTS_COUNT = getCommentsCount();
 const PHOTO_DESCRIPTION_COUNT = 25;
 
 function createComment() {
-  const arrayComments = new Array(COMMENTS_COUNT).fill().map((u, index) => ({
+  const comments = new Array(COMMENTS_COUNT).fill().map((u, index) => ({
     id: index + 1,
     avatar: chooseAvatar(),
     message: MESSAGES[_.random(0, MESSAGES.length - 1)],
     name: NAMES[_.random(0, NAMES.length - 1)],
   }));
-  return arrayComments;
+  return comments;
 }
 
 function createPhotoDescription() {
-  const arrayDescriptions = new Array(PHOTO_DESCRIPTION_COUNT).fill().map((u, index) => ({
+  const descriptions = new Array(PHOTO_DESCRIPTION_COUNT).fill().map((u, index) => ({
     id: index + 1,
     url: `photos/${index + 1}.jpg`,
     description: DESCRIPTIONS[_.random(0, DESCRIPTIONS.length - 1)],
     likes: getLikes(),
     comments: createComment(),
   }));
-  return arrayDescriptions;
+  return descriptions;
 }
 
 createPhotoDescription();
 
-export {createPhotoDescription};
-export {COMMENTS_COUNT};
+export {createPhotoDescription, createComment, COMMENTS_COUNT, commentList, chooseAvatar};
