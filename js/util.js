@@ -1,6 +1,3 @@
-// Функция для получения рандомного целого числа.
-// Источник: MDN (https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random).
-
 const message = 'Упс! Неверный диапазон.';
 
 function getRandomIntInclusive(min, max) {
