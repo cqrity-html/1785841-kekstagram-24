@@ -1,38 +1,5 @@
 import {getRandomIntInclusive} from './util.js';
 
-// Функция для проверки максимальной длины строки (Кекстаграм).
-
-const commentList = document.querySelector('.social__comments');
-const commentfield = document.querySelector('.social__footer-text');
-const errorMessage = 'Ой! Ваш комментарий слишком длинный. Попробуйте выразиться чуть лаконичнее.';
-
-function checkCommentLength(comment, maxLength) {
-  if (comment.length <= maxLength) {
-    const newComment = document.createElement('li');
-    newComment.classList.add('social__comment');
-    newComment.textContent = commentfield.value;
-    commentList.append(newComment);
-  }
-
-  return errorMessage;
-}
-
-checkCommentLength(commentfield.value, 140);
-
-//Создание массива из описаний фотографий
-
-function getLikes() {
-  return getRandomIntInclusive(15, 200);
-}
-
-function getCommentsCount() {
-  return getRandomIntInclusive(1, 10);
-}
-
-function chooseAvatar() {
-  return `img/avatar-${getRandomIntInclusive(1, 6)}.svg`;
-}
-
 const DESCRIPTIONS = [
   'Самое лучшее рандомное описание фотографии',
   'Разве может быть что-то красивее?',
@@ -62,11 +29,25 @@ const NAMES = [
   'Снежана',
 ];
 
-const COMMENTS_COUNT = getCommentsCount();
 const PHOTO_DESCRIPTION_COUNT = 25;
 
-function createComment() {
-  const comments = new Array(COMMENTS_COUNT).fill().map((u, index) => ({
+const commentList = document.querySelector('.social__comments');
+const commentsCount = getCommentsCount();
+
+function getLikes () {
+  return getRandomIntInclusive(15, 200);
+}
+
+function getCommentsCount () {
+  return getRandomIntInclusive(6, 38);
+}
+
+function chooseAvatar () {
+  return `img/avatar-${getRandomIntInclusive(1, 6)}.svg`;
+}
+
+function createComment () {
+  const comments = new Array(commentsCount).fill().map((u, index) => ({
     id: index + 1,
     avatar: chooseAvatar(),
     message: MESSAGES[_.random(0, MESSAGES.length - 1)],
@@ -75,7 +56,7 @@ function createComment() {
   return comments;
 }
 
-function createPhotoDescription() {
+function createPhotoDescription () {
   const descriptions = new Array(PHOTO_DESCRIPTION_COUNT).fill().map((u, index) => ({
     id: index + 1,
     url: `photos/${index + 1}.jpg`,
@@ -88,4 +69,4 @@ function createPhotoDescription() {
 
 createPhotoDescription();
 
-export {createPhotoDescription, createComment, COMMENTS_COUNT, commentList, chooseAvatar};
+export {createPhotoDescription, createComment, commentsCount, commentList, chooseAvatar};

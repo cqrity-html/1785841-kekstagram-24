@@ -1,6 +1,6 @@
 const message = 'Упс! Неверный диапазон.';
 
-function getRandomIntInclusive(min, max) {
+function getRandomIntInclusive (min, max) {
   if (max <= min) {
     return message;
   }
