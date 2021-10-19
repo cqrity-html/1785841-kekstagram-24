@@ -29,50 +29,56 @@ function getHashtags () {
   return hashTagsFromInput.split([' ']);
 }
 
-function onHashtagInput () {
-  const valueLength = hashtagField.value.length;
-  const hastags = getHashtags();
-  const newHastags = [];
-
-  if (hastags.length > 5) {
-    hashtagField.classList.add('error-field');
-    hashtagField.setCustomValidity('Можно оставить максимум 5 хэштэгов');
-  } else if (valueLength < MIN_NAME_LENGTH) {
-    hashtagField.setCustomValidity(`Ещё ${  MIN_NAME_LENGTH - valueLength } симв.`);
-  } else {
-    hashtagField.classList.remove('error-field');
-    hashtagField.setCustomValidity('');
-  }
-
-  for (let i = 0; i < hastags.length; i++) {
-    if (newHastags.includes(hastags[i])) {
+function checkSameHashtag (currentArray, newArray) {
+  for (let i = 0; i < currentArray.length; i++) {
+    if (newArray.includes(currentArray[i])) {
       hashtagField.setCustomValidity('Такой хэштэг уже есть');
     }
-    newHastags[i] = hastags[i];
+    newArray[i] = currentArray[i];
   }
+}
 
-  for (let i = 0; i < hastags.length; i++) {
-    if (hastags[i].length > MAX_NAME_LENGTH) {
+function checkHashtags (currentArray) {
+  for (let i = 0; i < currentArray.length; i++) {
+    if (currentArray[i].length > MAX_NAME_LENGTH) {
       hashtagField.classList.add('error-field');
       hashtagField.setCustomValidity('Удалите лишние символы из хэштэга');
-    } else if (!hashtagPattern.test(hastags[i])) {
+    } else if (!hashtagPattern.test(currentArray[i])) {
       hashtagField.classList.add('error-field');
       hashtagField.setCustomValidity('Исправьте хэштэги');
     } else {
       hashtagField.classList.remove('error-field');
     }
   }
+}
 
+function onHashtagInput () {
+  const hashtagValueLength = hashtagField.value.length;
+  const hashtags = getHashtags();
+  const newHashtags = [];
+
+  if (hashtags.length > 5) {
+    hashtagField.classList.add('error-field');
+    hashtagField.setCustomValidity('Можно оставить максимум 5 хэштэгов');
+  } else if (hashtagValueLength < MIN_NAME_LENGTH) {
+    hashtagField.setCustomValidity(`Ещё ${  MIN_NAME_LENGTH - hashtagValueLength } симв.`);
+  } else {
+    hashtagField.classList.remove('error-field');
+    hashtagField.setCustomValidity('');
+  }
+
+  checkSameHashtag(hashtags, newHashtags);
+  checkHashtags(hashtags);
   hashtagField.reportValidity();
 }
 
 function onCommentInput () {
-  const valueLength = commentField.value.length;
+  const commnntValueLength = commentField.value.length;
 
-  if (valueLength > MAX_COMMENT_LENGTH) {
+  if (commnntValueLength > MAX_COMMENT_LENGTH) {
     commentField.classList.add('error-field');
 
-    commentField.setCustomValidity(`Удалите лишние ${  valueLength - MAX_COMMENT_LENGTH } симв.`);
+    commentField.setCustomValidity(`Удалите лишние ${  commnntValueLength - MAX_COMMENT_LENGTH } симв.`);
   } else {
     commentField.classList.remove('error-field');
     commentField.setCustomValidity('');
