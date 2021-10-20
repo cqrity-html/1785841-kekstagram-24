@@ -54,10 +54,10 @@ function checkHashtags (currentArray) {
 
 function onHashtagInput () {
   const hashtagValueLength = hashtagField.value.length;
-  const hastags = getHashtags();
-  const newHastags = [];
+  const hashtags = getHashtags();
+  const newHashtags = [];
 
-  if (hastags.length > 5) {
+  if (hashtags.length > 5) {
     hashtagField.classList.add('error-field');
     hashtagField.setCustomValidity('Можно оставить максимум 5 хэштэгов');
   } else if (hashtagValueLength < MIN_NAME_LENGTH) {
@@ -67,8 +67,8 @@ function onHashtagInput () {
     hashtagField.setCustomValidity('');
   }
 
-  checkSameHashtag(hastags, newHastags);
-  checkHashtags(hastags);
+  checkSameHashtag(hashtags, newHashtags);
+  checkHashtags(hashtags);
   hashtagField.reportValidity();
 }
 
