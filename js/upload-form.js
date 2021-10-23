@@ -1,3 +1,10 @@
+import {zoomOut} from './photo-scale.js';
+import {zoomIn} from './photo-scale.js';
+import {onZoomOut} from './photo-scale.js';
+import {onZoomIn} from './photo-scale.js';
+import {photoPreview} from './photo-scale.js';
+import {sliderContainer} from './photo-effects.js';
+
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
@@ -98,7 +105,7 @@ function openImageUpload () {
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' && evt.key === 'Escape' && !hashtagField.classList.contains('focused')) {
+    if (evt.key === 'Escape' && !hashtagField.classList.contains('focused')) {
       closeImageUpload();
     }
   });
@@ -118,6 +125,10 @@ function openImageUpload () {
   commentField.addEventListener('focusout', () => {
     commentField.classList.remove('focused');
   });
+
+  zoomOut.addEventListener('click', onZoomOut);
+  zoomIn.addEventListener('click', onZoomIn);
+  sliderContainer.classList.add('visually-hidden');
 }
 
 function closeImageUpload () {
@@ -140,4 +151,9 @@ function closeImageUpload () {
   commentField.removeEventListener('focusout', () => {
     commentField.classList.remove('focused');
   });
+  zoomOut.removeEventListener('click', onZoomOut);
+  zoomIn.removeEventListener('click', onZoomIn);
+  photoPreview.style.transform = 'scale(1)';
 }
+
+export {uploadOverlay};
