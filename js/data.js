@@ -69,4 +69,4 @@ function createPhotoDescription () {
 
 createPhotoDescription();
 
-export {createPhotoDescription, createComment, commentsCount, commentList, chooseAvatar};
+export {createPhotoDescription, createComment, commentList, chooseAvatar};

@@ -1,12 +1,12 @@
 import {createPhotoDescription} from './data.js';
 import {createComment} from './data.js';
+import {commentList} from './data.js';
 
 const DISPLAY_COMMENTS = 5;
 
 const userDialog = document.querySelector('.big-picture');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
-const commentList = document.querySelector('.social__comments');
 const closeFullsizeButton = document.querySelector('.big-picture__cancel');
 const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -81,10 +81,8 @@ function createMiniature (item) {
 
   window.addEventListener('keydown', (evt) => {
     if (evt.key === 'Esc' || evt.key === 'Escape') {
-      if (!userDialog.classList.contains('hidden')) {
-        evt.preventDefault();
-        closeFullsize();
-      }
+      evt.preventDefault();
+      closeFullsize();
     }
   });
 }
