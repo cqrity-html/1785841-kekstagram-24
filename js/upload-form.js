@@ -4,6 +4,9 @@ import {onZoomOut} from './photo-scale.js';
 import {onZoomIn} from './photo-scale.js';
 import {photoPreview} from './photo-scale.js';
 import {sliderContainer} from './photo-effects.js';
+import {sendData} from './api.js';
+import {showSuccessMessage} from './messages.js';
+import {showErrorMessage} from './messages.js';
 
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 20;
@@ -99,13 +102,13 @@ function openImageUpload () {
   document.addEventListener('click', onRandomClick);
 
   window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Esc' && !commentField.classList.contains('focused')) {
+    if (evt.key === 'Escape' && !hashtagField.classList.contains('focused')) {
       closeImageUpload();
     }
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' && !hashtagField.classList.contains('focused')) {
+    if (evt.key === 'Esc' && !commentField.classList.contains('focused')) {
       closeImageUpload();
     }
   });
@@ -129,6 +132,7 @@ function openImageUpload () {
   zoomOut.addEventListener('click', onZoomOut);
   zoomIn.addEventListener('click', onZoomIn);
   sliderContainer.classList.add('visually-hidden');
+  setUserFormSubmit(closeImageUpload);
 }
 
 function closeImageUpload () {
@@ -154,6 +158,20 @@ function closeImageUpload () {
   zoomOut.removeEventListener('click', onZoomOut);
   zoomIn.removeEventListener('click', onZoomIn);
   photoPreview.style.transform = 'scale(1)';
+  uploadform.reset();
 }
 
-export {uploadOverlay};
+function setUserFormSubmit (onSuccess) {
+  uploadform.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => showSuccessMessage(),
+      () => showErrorMessage(),
+      new FormData(evt.target),
+    );
+    uploadform.reset();
+    onSuccess();
+  });
+}
+
+export {uploadOverlay, setUserFormSubmit, openImageUpload, closeImageUpload};

@@ -168,5 +168,4 @@ effectsList.addEventListener('change', (evt) => {
   }
 });
 
-
 export {sliderContainer};
