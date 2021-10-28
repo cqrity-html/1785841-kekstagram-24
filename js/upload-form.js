@@ -96,23 +96,22 @@ function onCommentInput () {
   commentField.reportValidity();
 }
 
+function onInputEscapeClose (evt) {
+  const isEscapeDown = evt.key === 'Esc' || evt.key === 'Escape';
+  const isInputHashtagFocus = document.activeElement === hashtagField;
+  const isTextareaCommentFocus = document.activeElement === commentField;
+
+  if (isEscapeDown && !(isInputHashtagFocus || isTextareaCommentFocus)) {
+    evt.preventDefault();
+    closeImageUpload();
+  }
+}
+
 function openImageUpload () {
   uploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('click', onRandomClick);
-
-  window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' && !hashtagField.classList.contains('focused')) {
-      closeImageUpload();
-    }
-  });
-
-  window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Esc' && !commentField.classList.contains('focused')) {
-      closeImageUpload();
-    }
-  });
-
+  document.addEventListener('keydown', onInputEscapeClose);
   uploadCancel.addEventListener('click', closeImageUpload);
   hashtagField.addEventListener('input', onHashtagInput);
   commentField.addEventListener('input', onCommentInput);
