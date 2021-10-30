@@ -72,12 +72,12 @@ const sliderOptions = {
   },
 };
 
-function setFilterClass(className) {
+const setFilterClass = (className) => {
   photoPreview.classList = '';
   photoPreview.classList.add(className);
-}
+};
 
-function updateSliderOptions({ range: { min, max }, start, step, effect, intensity }, startValue, display) {
+const updateSliderOptions = ({ range: { min, max }, start, step, effect, intensity }, startValue, display) => {
   currentEffect = effect;
   effectIntensity = intensity;
 
@@ -92,14 +92,14 @@ function updateSliderOptions({ range: { min, max }, start, step, effect, intensi
 
   sliderElement.noUiSlider.set(startValue);
   sliderContainer.style.display = display;
-}
+};
 
-function resetEffectSettings() {
+const resetEffectSettings = () => {
   photoPreview.classList = '';
   photoPreview.style.filter = '';
 
   updateSliderOptions(sliderOptions.none, START_VALUE, 'none');
-}
+};
 
 noUiSlider.create(sliderElement, {
   connect: 'lower',
@@ -117,7 +117,12 @@ sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
   effectLevelValue.setAttribute('value', unencoded[handle]);
 });
 
-effectsList.addEventListener('change', (evt) => {
+const returnEffectSlider = () => {
+  sliderElement.classList.remove('visually-hidden');
+  sliderContainer.classList.remove('visually-hidden');
+};
+
+const onEffectChange = (evt) => {
   const target = evt.target;
   const targetEffect = target.value;
 
@@ -131,41 +136,36 @@ effectsList.addEventListener('change', (evt) => {
     setFilterClass('effects__preview--chrome');
 
     updateSliderOptions(sliderOptions[targetEffect], START_VALUE, 'block');
-    sliderElement.classList.remove('visually-hidden');
-    sliderContainer.classList.remove('visually-hidden');
+    returnEffectSlider();
   }
 
   if (target && target.value === 'sepia') {
     setFilterClass('effects__preview--sepia');
 
     updateSliderOptions(sliderOptions[targetEffect], START_VALUE, 'block');
-    sliderElement.classList.remove('visually-hidden');
-    sliderContainer.classList.remove('visually-hidden');
+    returnEffectSlider();
   }
 
   if (target && target.value === 'marvin') {
     setFilterClass('effects__preview--marvin');
 
     updateSliderOptions(sliderOptions[targetEffect], START_VALUE, 'block');
-    sliderElement.classList.remove('visually-hidden');
-    sliderContainer.classList.remove('visually-hidden');
+    returnEffectSlider();
   }
 
   if (target && target.value === 'phobos') {
     setFilterClass('effects__preview--phobos');
 
     updateSliderOptions(sliderOptions[targetEffect], START_VALUE, 'block');
-    sliderElement.classList.remove('visually-hidden');
-    sliderContainer.classList.remove('visually-hidden');
+    returnEffectSlider();
   }
 
   if (target && target.value === 'heat') {
     setFilterClass('effects__preview--heat');
 
     updateSliderOptions(sliderOptions[targetEffect], START_VALUE, 'block');
-    sliderElement.classList.remove('visually-hidden');
-    sliderContainer.classList.remove('visually-hidden');
+    returnEffectSlider();
   }
-});
+};
 
-export {sliderContainer};
+export {sliderContainer, effectsList, onEffectChange};
