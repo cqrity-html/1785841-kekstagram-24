@@ -1,22 +1,19 @@
-import {createPhotoDescription} from './data.js';
-import {createComment} from './data.js';
-import {commentList} from './data.js';
-
 const DISPLAY_COMMENTS = 5;
 
 const userDialog = document.querySelector('.big-picture');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
+const commentList = document.querySelector('.social__comments');
 const closeFullsizeButton = document.querySelector('.big-picture__cancel');
 const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const similarPictures = createPhotoDescription();
-const similarComments = createComment();
 const commentTemplate = userDialog.querySelector('.social__comment');
 
-similarPictures.forEach((picture) => {
-  createMiniature(picture);
-});
+function renderPictures (pictures) {
+  pictures.forEach((picture) => {
+    createMiniature(picture);
+  });
+}
 
 function onRandomClick (evt) {
   if (evt.target.matches('.big-picture')) {
@@ -69,7 +66,7 @@ function createMiniature (item) {
     userDialog.classList.remove('hidden');
     userDialog.querySelector('.big-picture__img img').src = item.url;
     userDialog.querySelector('.likes-count').textContent = item.likes;
-    userDialog.querySelector('.comments-count').textContent = similarComments.length;
+    userDialog.querySelector('.comments-count').textContent = item.comments.length;
     userDialog.querySelector('.social__caption').textContent = item.description;
     userDialog.querySelector('.social__comment-count').classList.remove('hidden');
     userDialog.querySelector('.comments-loader').classList.remove('hidden');
@@ -77,6 +74,7 @@ function createMiniature (item) {
     getComments(item.comments);
     document.addEventListener('click', onRandomClick);
     closeFullsizeButton.addEventListener('click', closeFullsize);
+    showCommentCount();
   });
 
   window.addEventListener('keydown', (evt) => {
@@ -88,6 +86,9 @@ function createMiniature (item) {
 }
 
 function showCommentCount () {
+  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
+    commentsLoader.classList.add('hidden');
+  }
   const displayedComments = userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length;
   userDialog.querySelector('.current-comments-count').textContent = displayedComments;
 }
@@ -115,3 +116,5 @@ commentsLoader.addEventListener('click', () => {
   loadComments();
   showCommentCount();
 });
+
+export {createMiniature, renderPictures};
