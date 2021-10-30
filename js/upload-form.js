@@ -55,7 +55,7 @@ function checkHashtags (currentArray) {
       hashtagField.setCustomValidity('Удалите лишние символы из хэштэга');
     } else if (!hashtagPattern.test(currentArray[i])) {
       hashtagField.classList.add('error-field');
-      hashtagField.setCustomValidity('Исправьте хэштэги');
+      hashtagField.setCustomValidity('Хэш-тег должен начинается с символа # (решётка). Хэш-тег должен состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т.д. Максимальная длинна хэш-тега не должна превышать 20 символов (включая решетку).');
     } else {
       hashtagField.classList.remove('error-field');
     }
@@ -173,4 +173,4 @@ function setUserFormSubmit (onSuccess) {
   });
 }
 
-export {uploadOverlay, setUserFormSubmit, openImageUpload, closeImageUpload};
+export {uploadOverlay, setUserFormSubmit, openImageUpload, closeImageUpload, uploadButton};

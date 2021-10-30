@@ -1,10 +1,12 @@
 import {renderPictures} from './pictures.js';
+import {changeFilter} from './filters.js';
 
 function getPhotos (onFail) {
   return fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((photos) => {
       renderPictures(photos);
+      changeFilter(photos);
     })
     .catch(() => {
       onFail('Не удалось загрузить фотографии. Попробуйте позже');

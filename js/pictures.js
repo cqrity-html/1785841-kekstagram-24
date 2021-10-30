@@ -117,4 +117,4 @@ commentsLoader.addEventListener('click', () => {
   showCommentCount();
 });
 
-export {createMiniature, renderPictures};
+export {createMiniature, renderPictures, picturesList};

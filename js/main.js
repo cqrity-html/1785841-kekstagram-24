@@ -8,4 +8,3 @@ import {getPhotos} from './api.js';
 import {showAlert} from './util.js';
 
 getPhotos(showAlert);
-
