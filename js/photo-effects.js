@@ -4,7 +4,6 @@ const START_VALUE = 100;
 
 const sliderContainer = document.querySelector('.effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
-const effectsList = document.querySelector('.effects__list');
 const effectLevelValue = document.querySelector('.effect-level__value');
 let currentEffect = '';
 let effectIntensity = '';
@@ -168,4 +167,4 @@ const onEffectChange = (evt) => {
   }
 };
 
-export {sliderContainer, effectsList, onEffectChange};
+export {sliderContainer, onEffectChange};

@@ -8,15 +8,17 @@ import {sliderContainer} from './photo-effects.js';
 import {sendData} from './api.js';
 import {showSuccessMessage} from './messages.js';
 import {showErrorMessage} from './messages.js';
+import {isEscapeKey} from './util.js';
 
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
+const MAX_HASHTAGS_NUMBER = 5;
 
 const uploadButton = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('#upload-cancel');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
-const uploadform = document.querySelector('.img-upload__form');
+const uploadForm = document.querySelector('.img-upload__form');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const hashtagPattern = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
@@ -54,7 +56,7 @@ const onHashtagInput = () => {
   const hashtags = getHashtags();
   const newHashtags = [];
 
-  if (hashtags.length > 5) {
+  if (hashtags.length > MAX_HASHTAGS_NUMBER) {
     hashtagField.classList.add('error-field');
     hashtagField.setCustomValidity('Можно оставить максимум 5 хэштэгов');
   } else if (hashtagValueLength < MIN_NAME_LENGTH) {
@@ -70,12 +72,12 @@ const onHashtagInput = () => {
 };
 
 const onCommentInput = () => {
-  const commnntValueLength = commentField.value.length;
+  const commentValueLength = commentField.value.length;
 
-  if (commnntValueLength > MAX_COMMENT_LENGTH) {
+  if (commentValueLength > MAX_COMMENT_LENGTH) {
     commentField.classList.add('error-field');
 
-    commentField.setCustomValidity(`Удалите лишние ${  commnntValueLength - MAX_COMMENT_LENGTH } симв.`);
+    commentField.setCustomValidity(`Удалите лишние ${  commentValueLength - MAX_COMMENT_LENGTH } симв.`);
   } else {
     commentField.classList.remove('error-field');
     commentField.setCustomValidity('');
@@ -96,14 +98,14 @@ const closeImageUpload = (onClick, onEscape) => {
   zoomIn.removeEventListener('click', onZoomIn);
   photoPreview.style.transform = 'scale(1)';
   uploadOverlay.removeEventListener('click', onEffectChange);
-  uploadform.reset();
+  uploadForm.reset();
 };
 
 const onInputEscapeClose = (evt) => {
   const isInputHashtagFocus = document.activeElement === hashtagField;
   const isTextareaCommentFocus = document.activeElement === commentField;
 
-  if ((evt.key === 'Esc' || evt.key === 'Escape') && !(isInputHashtagFocus || isTextareaCommentFocus)) {
+  if ((isEscapeKey) && !(isInputHashtagFocus || isTextareaCommentFocus)) {
     evt.preventDefault();
     closeImageUpload(_, onInputEscapeClose);
   }
@@ -116,14 +118,14 @@ const onRandomClick = (evt) => {
 };
 
 const setUserFormSubmit = (onSuccess) => {
-  uploadform.addEventListener('submit', (evt) => {
+  uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
       () => showSuccessMessage(),
       () => showErrorMessage(),
       new FormData(evt.target),
     );
-    uploadform.reset();
+    uploadForm.reset();
     onSuccess();
   });
 };
@@ -149,6 +151,6 @@ const onFileUpload = (evt) => {
   }
 };
 
-uploadform.addEventListener('change', onFileUpload);
+uploadForm.addEventListener('change', onFileUpload);
 
 export {uploadButton};

@@ -1,10 +1,12 @@
+import {isEscapeKey} from './util.js';
+
 const DISPLAYED_COMMENTS = 5;
 
 const userDialog = document.querySelector('.big-picture');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
 const commentList = document.querySelector('.social__comments');
-const closeFullsizeButton = document.querySelector('.big-picture__cancel');
+const closeFullSizeButton = document.querySelector('.big-picture__cancel');
 const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const commentTemplate = userDialog.querySelector('.social__comment');
@@ -63,8 +65,7 @@ const showCommentCount = () => {
   if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
     commentsLoader.classList.add('hidden');
   }
-  const displayedComments = userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length;
-  userDialog.querySelector('.current-comments-count').textContent = displayedComments;
+  userDialog.querySelector('.current-comments-count').textContent = `${userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length}`;
 };
 
 const onCommentsOpen = () => {
@@ -72,7 +73,7 @@ const onCommentsOpen = () => {
   showCommentCount();
 };
 
-const closeFullsize = () => {
+const closeFullSize = () => {
   userDialog.classList.add('hidden');
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.remove('hidden');
@@ -100,15 +101,15 @@ const createMiniature = (item) => {
     document.body.classList.add('modal-open');
     getComments(item.comments);
     document.addEventListener('click', onRandomClick);
-    closeFullsizeButton.addEventListener('click', closeFullsize);
+    closeFullSizeButton.addEventListener('click', closeFullSize);
     showCommentCount();
     commentsLoader.addEventListener('click', onCommentsOpen);
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Esc' || evt.key === 'Escape') {
+    if (isEscapeKey) {
       evt.preventDefault();
-      closeFullsize();
+      closeFullSize();
     }
   });
 };
