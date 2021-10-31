@@ -1,4 +1,4 @@
-const DISPLAY_COMMENTS = 5;
+const DISPLAYED_COMMENTS = 5;
 
 const userDialog = document.querySelector('.big-picture');
 const socialCommentCount = document.querySelector('.social__comment-count');
@@ -9,52 +9,79 @@ const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const commentTemplate = userDialog.querySelector('.social__comment');
 
-function renderPictures (pictures) {
-  pictures.forEach((picture) => {
-    createMiniature(picture);
-  });
-}
+const createNewComment = (comment) => {
+  const commentElement = commentTemplate.cloneNode(true);
+  commentElement.querySelector('.social__picture').src = comment.avatar;
+  commentElement.querySelector('.social__picture').title = comment.name;
+  commentElement.querySelector('.social__text').textContent = comment.message;
+  return commentElement;
+};
 
-function onRandomClick (evt) {
+const getComments = (comments) => {
+  const commentsList = userDialog.querySelector('.social__comments');
+  commentList.innerHTML = '';
+  const fragment = document.createDocumentFragment();
+  comments.forEach((currentItem, index) => {
+    const comment = createNewComment(currentItem);
+    if (index >= DISPLAYED_COMMENTS) {
+      comment.classList.add('visually-hidden');
+    }
+    fragment.appendChild(comment);
+  });
+  commentsList.appendChild(fragment);
+};
+
+const onRandomClick = (evt) => {
   if (evt.target.matches('.big-picture')) {
     userDialog.classList.add('hidden');
     socialCommentCount.classList.add('hidden');
     commentsLoader.classList.remove('hidden');
     document.body.classList.remove('modal-open');
   }
-}
+};
 
-function createNewComment(comment) {
-  const commentElement = commentTemplate.cloneNode(true);
-  commentElement.querySelector('.social__picture').src = comment.avatar;
-  commentElement.querySelector('.social__picture').title = comment.name;
-  commentElement.querySelector('.social__text').textContent = comment.message;
-  return commentElement;
-}
-
-function getComments (comments) {
-  const commentsList = userDialog.querySelector('.social__comments');
-  commentList.innerHTML = '';
-  const fragment = document.createDocumentFragment();
-  comments.forEach((currentItem, index) => {
-    const comment = createNewComment(currentItem);
-    if (index >= DISPLAY_COMMENTS) {
-      comment.classList.add('visually-hidden');
+const loadComments = () => {
+  const commentHiddenElements = userDialog.querySelectorAll('.social__comment.visually-hidden');
+  let countHiddenElements;
+  function getCountHiddenElement () {
+    if (commentHiddenElements.length > DISPLAYED_COMMENTS) {
+      countHiddenElements = DISPLAYED_COMMENTS;
+    } else {
+      countHiddenElements = commentHiddenElements.length;
     }
-    fragment.appendChild(comment);
-  });
-  commentsList.appendChild(fragment);
-}
+  }
+  getCountHiddenElement();
+  for (let i = 0; i < countHiddenElements; i++) {
+    commentHiddenElements[i].classList.remove('visually-hidden');
+  }
+  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
+    commentsLoader.classList.add('hidden');
+  }
+};
 
-function closeFullsize () {
+const showCommentCount = () => {
+  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
+    commentsLoader.classList.add('hidden');
+  }
+  const displayedComments = userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length;
+  userDialog.querySelector('.current-comments-count').textContent = displayedComments;
+};
+
+const onCommentsOpen = () => {
+  loadComments();
+  showCommentCount();
+};
+
+const closeFullsize = () => {
   userDialog.classList.add('hidden');
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.remove('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('click', onRandomClick);
-}
+  commentsLoader.removeEventListener('click', onCommentsOpen);
+};
 
-function createMiniature (item) {
+const createMiniature = (item) => {
   const copyPictureTemplate = pictureTemplate.cloneNode(true);
   copyPictureTemplate.querySelector('.picture__img').src = item.url;
   copyPictureTemplate.querySelector('.picture__likes').textContent = item.likes;
@@ -75,6 +102,7 @@ function createMiniature (item) {
     document.addEventListener('click', onRandomClick);
     closeFullsizeButton.addEventListener('click', closeFullsize);
     showCommentCount();
+    commentsLoader.addEventListener('click', onCommentsOpen);
   });
 
   window.addEventListener('keydown', (evt) => {
@@ -83,38 +111,12 @@ function createMiniature (item) {
       closeFullsize();
     }
   });
-}
+};
 
-function showCommentCount () {
-  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
-    commentsLoader.classList.add('hidden');
-  }
-  const displayedComments = userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length;
-  userDialog.querySelector('.current-comments-count').textContent = displayedComments;
-}
+const renderPictures = (pictures) => {
+  pictures.forEach((picture) => {
+    createMiniature(picture);
+  });
+};
 
-function loadComments () {
-  const commentHiddenElements = userDialog.querySelectorAll('.social__comment.visually-hidden');
-  let countHiddenElements;
-  function getCountHiddenElement () {
-    if (commentHiddenElements.length > DISPLAY_COMMENTS) {
-      countHiddenElements = DISPLAY_COMMENTS;
-    } else {
-      countHiddenElements = commentHiddenElements.length;
-    }
-  }
-  getCountHiddenElement();
-  for (let i = 0; i < countHiddenElements; i++) {
-    commentHiddenElements[i].classList.remove('visually-hidden');
-  }
-  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
-    commentsLoader.classList.add('hidden');
-  }
-}
-
-commentsLoader.addEventListener('click', () => {
-  loadComments();
-  showCommentCount();
-});
-
-export {createMiniature, renderPictures};
+export {renderPictures, picturesList};

@@ -7,29 +7,29 @@ const zoomOut = document.querySelector('.scale__control--smaller');
 const zoomIn = document.querySelector('.scale__control--bigger');
 const photoPreview = document.querySelector('.img-upload__preview img');
 
-function decreaseScale () {
+const decreaseScale = () => {
   const scaleStep = (scaleControl.value === MIN_SCALE_VALUE) ? 0 : SCALE_STEP;
   scaleControl.value = `${(parseInt(scaleControl.value, 10) - scaleStep)}%`;
-}
+};
 
-function increaseScale () {
+const increaseScale = () => {
   const scaleStep = (scaleControl.value === MAX_SCALE_VALUE) ? 0 : SCALE_STEP;
   scaleControl.value = `${(parseInt(scaleControl.value, 10) + scaleStep)}%`;
-}
+};
 
-function changeScale () {
+const changeScale = () => {
   const currentScale = parseInt(scaleControl.value, 10);
   photoPreview.style.transform = `scale(${(currentScale / 100)})`;
-}
+};
 
-function onZoomOut () {
+const onZoomOut = () => {
   decreaseScale();
   changeScale();
-}
+};
 
-function onZoomIn () {
+const onZoomIn = () => {
   increaseScale();
   changeScale();
-}
+};
 
-export {zoomOut, zoomIn, photoPreview, onZoomOut, onZoomIn, scaleControl};
+export {zoomOut, zoomIn, photoPreview, onZoomOut, onZoomIn};

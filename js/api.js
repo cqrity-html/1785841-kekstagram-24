@@ -1,15 +1,17 @@
 import {renderPictures} from './pictures.js';
+import {changeFilter} from './filters.js';
 
-function getPhotos (onFail) {
-  return fetch('https://24.javascript.pages.academy/kekstagram/data')
+const getPhotos = (onFail) => {
+  fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((photos) => {
       renderPictures(photos);
+      changeFilter(photos);
     })
     .catch(() => {
       onFail('Не удалось загрузить фотографии. Попробуйте позже');
     });
-}
+};
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
@@ -19,13 +21,7 @@ const sendData = (onSuccess, onFail, body) => {
       body: body,
     },
   )
-    .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
-      }
-    })
+    .then((response) => response.ok ? onSuccess() : onFail('Не удалось отправить форму. Попробуйте ещё раз'))
     .catch(() => {
       onFail('Не удалось отправить форму. Попробуйте ещё раз');
     });
