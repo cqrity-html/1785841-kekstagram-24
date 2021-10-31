@@ -1,5 +1,3 @@
-import {isEscapeKey} from './util.js';
-
 const ALERT_SHOW_TIME = 5000;
 
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -10,17 +8,20 @@ const showSuccessMessage = () => {
   document.body.appendChild(copySuccessMessageTemplate);
   const successButton = document.querySelector('.success__button');
   const successMessage = document.querySelector('.success');
-  successButton.addEventListener('click', () => {
-    successMessage.remove();
-  });
+  const removeSuccessMessage = () => successMessage.remove();
+  successButton.addEventListener('click', removeSuccessMessage);
   document.addEventListener('click', (evt) => {
     if (evt.target.matches('.success')) {
+      successButton.removeEventListener('click', removeSuccessMessage);
       successMessage.remove();
     }
   });
   window.addEventListener('keydown', (evt) => {
     if (evt.key === 'Esc' || evt.key === 'Escape') {
       evt.preventDefault();
+      successButton.removeEventListener('click', () => {
+        successMessage.remove();
+      });
       successMessage.remove();
     }
   });
@@ -31,17 +32,18 @@ const showErrorMessage = () => {
   document.body.appendChild(copyErrorMessageTemplate);
   const errorButton = document.querySelector('.error__button');
   const errorMessage = document.querySelector('.error');
-  errorButton.addEventListener('click', () => {
-    errorMessage.remove();
-  });
+  const removeErrorMessage = () => errorMessage.remove();
+  errorButton.addEventListener('click', removeErrorMessage);
   document.addEventListener('click', (evt) => {
     if (evt.target.matches('.error')) {
+      errorButton.removeEventListener('click', removeErrorMessage);
       errorMessage.remove();
     }
   });
   window.addEventListener('keydown', (evt) => {
-    if (isEscapeKey) {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
       evt.preventDefault();
+      errorButton.removeEventListener('click', removeErrorMessage);
       errorMessage.remove();
     }
   });

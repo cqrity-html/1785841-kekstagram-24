@@ -1,5 +1,3 @@
-import {isEscapeKey} from './util.js';
-
 const DISPLAYED_COMMENTS = 5;
 
 const userDialog = document.querySelector('.big-picture');
@@ -33,14 +31,6 @@ const getComments = (comments) => {
   commentsList.appendChild(fragment);
 };
 
-const showCommentCount = () => {
-  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
-    commentsLoader.classList.add('hidden');
-  }
-  const displayedComments = userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length;
-  userDialog.querySelector('.current-comments-count').textContent = displayedComments;
-};
-
 const onRandomClick = (evt) => {
   if (evt.target.matches('.big-picture')) {
     userDialog.classList.add('hidden');
@@ -50,12 +40,45 @@ const onRandomClick = (evt) => {
   }
 };
 
+const loadComments = () => {
+  const commentHiddenElements = userDialog.querySelectorAll('.social__comment.visually-hidden');
+  let countHiddenElements;
+  function getCountHiddenElement () {
+    if (commentHiddenElements.length > DISPLAYED_COMMENTS) {
+      countHiddenElements = DISPLAYED_COMMENTS;
+    } else {
+      countHiddenElements = commentHiddenElements.length;
+    }
+  }
+  getCountHiddenElement();
+  for (let i = 0; i < countHiddenElements; i++) {
+    commentHiddenElements[i].classList.remove('visually-hidden');
+  }
+  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
+    commentsLoader.classList.add('hidden');
+  }
+};
+
+const showCommentCount = () => {
+  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
+    commentsLoader.classList.add('hidden');
+  }
+  const displayedComments = userDialog.querySelectorAll('.social__comment:not(.visually-hidden)').length;
+  userDialog.querySelector('.current-comments-count').textContent = displayedComments;
+};
+
+const onCommentsOpen = () => {
+  loadComments();
+  showCommentCount();
+};
+
 const closeFullsize = () => {
   userDialog.classList.add('hidden');
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.remove('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('click', onRandomClick);
+  commentsLoader.removeEventListener('click', onCommentsOpen);
 };
 
 const createMiniature = (item) => {
@@ -79,10 +102,11 @@ const createMiniature = (item) => {
     document.addEventListener('click', onRandomClick);
     closeFullsizeButton.addEventListener('click', closeFullsize);
     showCommentCount();
+    commentsLoader.addEventListener('click', onCommentsOpen);
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (isEscapeKey) {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
       evt.preventDefault();
       closeFullsize();
     }
@@ -94,29 +118,5 @@ const renderPictures = (pictures) => {
     createMiniature(picture);
   });
 };
-
-const loadComments = () => {
-  const commentHiddenElements = userDialog.querySelectorAll('.social__comment.visually-hidden');
-  let countHiddenElements;
-  function getCountHiddenElement () {
-    if (commentHiddenElements.length > DISPLAYED_COMMENTS) {
-      countHiddenElements = DISPLAYED_COMMENTS;
-    } else {
-      countHiddenElements = commentHiddenElements.length;
-    }
-  }
-  getCountHiddenElement();
-  for (let i = 0; i < countHiddenElements; i++) {
-    commentHiddenElements[i].classList.remove('visually-hidden');
-  }
-  if (userDialog.querySelectorAll('.social__comment.visually-hidden').length === 0) {
-    commentsLoader.classList.add('hidden');
-  }
-};
-
-commentsLoader.addEventListener('click', () => {
-  loadComments();
-  showCommentCount();
-});
 
 export {renderPictures, picturesList};

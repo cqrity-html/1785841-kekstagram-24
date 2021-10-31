@@ -3,13 +3,11 @@ import {zoomIn} from './photo-scale.js';
 import {onZoomOut} from './photo-scale.js';
 import {onZoomIn} from './photo-scale.js';
 import {photoPreview} from './photo-scale.js';
-import {sliderContainer} from './photo-effects.js';
-import {effectsList} from './photo-effects.js';
 import {onEffectChange} from './photo-effects.js';
+import {sliderContainer} from './photo-effects.js';
 import {sendData} from './api.js';
 import {showSuccessMessage} from './messages.js';
 import {showErrorMessage} from './messages.js';
-import {isEscapeKey} from './util.js';
 
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 20;
@@ -44,7 +42,7 @@ const checkHashtags = (currentArray) => {
       hashtagField.setCustomValidity('Удалите лишние символы из хэштэга');
     } else if (!hashtagPattern.test(currentArray[i])) {
       hashtagField.classList.add('error-field');
-      hashtagField.setCustomValidity('Хэш-тег должен начинается с символа # (решётка). Хэш-тег должен состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т.д. Максимальная длинна хэш-тега не должна превышать 20 символов (включая решетку).');
+      hashtagField.setCustomValidity('Хэш-тег должен начинается с символа # (решётка). Хэш-тег должен состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д. Максимальная длинна хэш-тега не должна превышать 20 символов (включая решетку).');
     } else {
       hashtagField.classList.remove('error-field');
     }
@@ -85,27 +83,35 @@ const onCommentInput = () => {
   commentField.reportValidity();
 };
 
-const closeImageUpload = () => {
+const closeImageUpload = (onClick, onEscape) => {
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadButton.value = '';
+  document.removeEventListener('click', onClick);
+  document.removeEventListener('keydown', onEscape);
   hashtagField.removeEventListener('input', onHashtagInput);
   commentField.removeEventListener('input', onCommentInput);
   uploadCancel.removeEventListener('click', closeImageUpload);
   zoomOut.removeEventListener('click', onZoomOut);
   zoomIn.removeEventListener('click', onZoomIn);
   photoPreview.style.transform = 'scale(1)';
-  effectsList.removeEventListener('change', onEffectChange);
+  uploadOverlay.removeEventListener('click', onEffectChange);
   uploadform.reset();
 };
 
 const onInputEscapeClose = (evt) => {
-  const isHashtagFieldInFocus = document.activeElement === hashtagField;
-  const isCommentFieldInFocus = document.activeElement === commentField;
+  const isInputHashtagFocus = document.activeElement === hashtagField;
+  const isTextareaCommentFocus = document.activeElement === commentField;
 
-  if ((isEscapeKey) && !(isHashtagFieldInFocus || isCommentFieldInFocus)) {
+  if ((evt.key === 'Esc' || evt.key === 'Escape') && !(isInputHashtagFocus || isTextareaCommentFocus)) {
     evt.preventDefault();
-    closeImageUpload();
+    closeImageUpload(_, onInputEscapeClose);
+  }
+};
+
+const onRandomClick = (evt) => {
+  if (evt.target.matches('.img-upload__overlay')) {
+    closeImageUpload(onRandomClick, _);
   }
 };
 
@@ -125,15 +131,16 @@ const setUserFormSubmit = (onSuccess) => {
 const openImageUpload = () => {
   uploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  window.addEventListener('keydown', onInputEscapeClose);
+  document.addEventListener('click', onRandomClick);
+  document.addEventListener('keydown', onInputEscapeClose);
   uploadCancel.addEventListener('click', closeImageUpload);
   hashtagField.addEventListener('input', onHashtagInput);
   commentField.addEventListener('input', onCommentInput);
   zoomOut.addEventListener('click', onZoomOut);
   zoomIn.addEventListener('click', onZoomIn);
   sliderContainer.classList.add('visually-hidden');
+  uploadOverlay.addEventListener('click', onEffectChange);
   setUserFormSubmit(closeImageUpload);
-  effectsList.addEventListener('change', onEffectChange);
 };
 
 const onFileUpload = (evt) => {
