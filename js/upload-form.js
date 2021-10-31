@@ -150,3 +150,5 @@ const onFileUpload = (evt) => {
 };
 
 uploadform.addEventListener('change', onFileUpload);
+
+export {uploadButton};
