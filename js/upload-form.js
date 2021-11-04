@@ -5,6 +5,7 @@ import {onZoomIn} from './photo-scale.js';
 import {photoPreview} from './photo-scale.js';
 import {onEffectChange} from './photo-effects.js';
 import {sliderContainer} from './photo-effects.js';
+import {resetEffectSettings} from './photo-effects.js';
 import {sendData} from './api.js';
 import {showSuccessMessage} from './messages.js';
 import {showErrorMessage} from './messages.js';
@@ -45,7 +46,7 @@ const checkHashtags = (currentArray) => {
     } else if (!hashtagPattern.test(currentArray[i])) {
       hashtagField.classList.add('error-field');
       hashtagField.setCustomValidity('Хэш-тег должен начинается с символа # (решётка). Хэш-тег должен состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д. Максимальная длинна хэш-тега не должна превышать 20 символов (включая решетку).');
-    } else {
+    } else{
       hashtagField.classList.remove('error-field');
     }
   }
@@ -98,6 +99,7 @@ const closeImageUpload = (onClick, onEscape) => {
   zoomIn.removeEventListener('click', onZoomIn);
   photoPreview.style.transform = 'scale(1)';
   uploadOverlay.removeEventListener('click', onEffectChange);
+  resetEffectSettings();
   uploadForm.reset();
 };
 

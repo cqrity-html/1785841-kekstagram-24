@@ -167,4 +167,4 @@ const onEffectChange = (evt) => {
   }
 };
 
-export {sliderContainer, onEffectChange};
+export {sliderContainer, onEffectChange, resetEffectSettings};
