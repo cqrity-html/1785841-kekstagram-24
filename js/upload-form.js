@@ -8,7 +8,6 @@ import {sliderContainer} from './photo-effects.js';
 import {sendData} from './api.js';
 import {showSuccessMessage} from './messages.js';
 import {showErrorMessage} from './messages.js';
-import {isEscapeKey} from './util.js';
 
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 20;
@@ -105,7 +104,7 @@ const onInputEscapeClose = (evt) => {
   const isInputHashtagFocus = document.activeElement === hashtagField;
   const isTextareaCommentFocus = document.activeElement === commentField;
 
-  if ((isEscapeKey) && !(isInputHashtagFocus || isTextareaCommentFocus)) {
+  if ((evt.key === 'Esc' || evt.key === 'Escape') && !(isInputHashtagFocus || isTextareaCommentFocus)) {
     evt.preventDefault();
     closeImageUpload(_, onInputEscapeClose);
   }

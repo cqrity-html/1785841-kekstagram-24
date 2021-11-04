@@ -1,5 +1,3 @@
-import {isEscapeKey} from './util.js';
-
 const ALERT_SHOW_TIME = 5000;
 
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -19,7 +17,7 @@ const showSuccessMessage = () => {
     }
   });
   window.addEventListener('keydown', (evt) => {
-    if (isEscapeKey) {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
       evt.preventDefault();
       successButton.removeEventListener('click', () => {
         successMessage.remove();
@@ -43,7 +41,7 @@ const showErrorMessage = () => {
     }
   });
   window.addEventListener('keydown', (evt) => {
-    if (isEscapeKey) {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
       evt.preventDefault();
       errorButton.removeEventListener('click', removeErrorMessage);
       errorMessage.remove();

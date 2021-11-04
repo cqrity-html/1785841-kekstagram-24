@@ -1,5 +1,3 @@
-import {isEscapeKey} from './util.js';
-
 const DISPLAYED_COMMENTS = 5;
 
 const userDialog = document.querySelector('.big-picture');
@@ -107,7 +105,7 @@ const createMiniature = (item) => {
   });
 
   window.addEventListener('keydown', (evt) => {
-    if (isEscapeKey) {
+    if (evt.key === 'Esc' || evt.key === 'Escape') {
       evt.preventDefault();
       closeFullSize();
     }
